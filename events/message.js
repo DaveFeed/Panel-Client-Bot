@@ -18,12 +18,14 @@ module.exports = (client, message) => {
     if (args[0] && args[0].toLowerCase() == 'help' && cmd.help.description)
         return message.channel.send(
             new Discord.MessageEmbed()
-            .setTitle(`Help for command \`${command[0].toUpperCase()}${command.slice(1)}\``)
-            .setColor(config.Colors.Waiting)
-            .setDescription(cmd.help.description)
-            .addField('Category', `\`${cmd.help.category}\``)
-            .addField('Usage',`\`${config.prefix}${cmd.help.usage}\``)
-            .setTimestamp()
+                .setTitle(`Help for command \`${command[0].toUpperCase()}${command.slice(1)}\``)
+                .setColor(config.Colors.Waiting)
+                .setDescription(cmd.help.description)
+                .addField('Category', `\`${cmd.help.category}\``)
+                .addField('Usage', `\`${config.prefix}${cmd.help.usage}\``)
+                .setTimestamp()
         )
-    cmd.run(client, message, args);
+    cmd.run(client, message, args).catch(o_O => {
+        console.log("Code better you weirdo: "+o_O.stack)
+    });
 };

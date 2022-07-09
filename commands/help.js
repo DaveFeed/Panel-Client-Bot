@@ -8,9 +8,11 @@ module.exports.run = async (client, message, args) => {
         file.endsWith(".js")
     );
     commands.forEach(command => {
-        let data = require(`./${command}`)
-        if (!obj[data.help.category]) obj[data.help.category] = []
-        obj[data.help.category].push(`\`${data.help.name}\``);
+        try {
+            let data = require(`./${command}`)
+            if (!obj[data.help.category]) obj[data.help.category] = []
+            obj[data.help.category].push(`\`${data.help.name}\``);
+        }catch(e){}
     });
     let categories = Object.keys(obj).map(data => {
         return {

@@ -9,19 +9,13 @@ module.exports.run = async (client, message, args) => {
         .setColor(config.Colors.Waiting)
         .setDescription("This might take some time."))
 
-    pteroclient.getServers(config.host,config.api_token).then(async servers => {
+    pteroclient.getAccount(config.host, config.api_token).then(async info => {
         let embed = new Discord.MessageEmbed()
-            .setTitle("Your Servers")
-            .setColor(config.Colors.Listing);
-        for (let i = 0; i < servers.length; i++) {
-            let server = servers[i].attributes;
-            embed.addField(`${server.name} ${server.server_owner?"(Owner)":"(Member)"}`,
-                `\`\`\`${server.is_installing?"INSTALLING\n":""}ID: ${server.identifier}\
-                \n${server.node.replace(' ',": ")}\
-                \nIP Adress: ${server.relationships.allocations.data[0].attributes.ip}\
-                \nPort: ${server.relationships.allocations.data[0].attributes.port}\`\`\``
-            );
-        }
+            .setTitle(`Account "${info.username}" ${info.admin?'(ADMIN)':''}`)
+            .setColor(config.Colors.Success)
+            .setDescription(`ID: \`${info.id}\`\
+            \nName: ${info.first_name} ${info.last_name}\
+            \nEmail: ${info.email}`);
         msg.edit(embed);
     }).catch(error => msg.edit(new Discord.MessageEmbed()
         .setTitle("An Error has occured!")
@@ -31,8 +25,8 @@ module.exports.run = async (client, message, args) => {
     }));
 }
 module.exports.help = {
-    name: "servers",
-    description: `Shows all the Servers.`,
-    usage: `servers`,
+    name: "account",
+    description: `Shows account details.`,
+    usage: `account`,
     category: `Panel`
 }

@@ -9,18 +9,18 @@ module.exports = async client => {
         client.generateInvite(["ADMINISTRATOR"]).then(link => {
             client.log("Invite Link: " + link);
         })
-    setInterval(() => {
-        if (global.pterologged)
-            client.user.setPresence({
-                activity: {
-                    name: `Logged in`
-                }
-            })
-        else client.user.setPresence({
+    if (global.pterologged === undefined)
+        client.user.setPresence({
             activity: {
-                name: `Not Logged in`
+                name: `Waiting...`
             }
         })
-    }, 15000)
-
+        
+    client.UpdateServers();
+    global.monitorInterval = setInterval(
+        () => {
+            client.UpdateServers();
+        },
+        config.ServerUpdate * 1000
+    )
 };
